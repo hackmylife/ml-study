@@ -38,8 +38,8 @@ class Function:
 
         for output in outputs:
             output.set_creator(self)
-            self.inputs = inputs
-            self.outputs = outputs
+        self.inputs = inputs
+        self.outputs = outputs
         return outputs
 
     def forward(self, x):
