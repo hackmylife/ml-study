@@ -61,6 +61,5 @@ def plot_dot_graph(output, verbose=True, to_file='graph.png'):
         f.write(dot_graph)
 
     extension = os.path.splitext(to_file)[1][1:]
-    cmd = 'dot {} -`T {} -o {}'.format(graph_path, extension, to_file)
-    print(cmd)
+    cmd = 'dot {} -T {} -o {}'.format(graph_path, extension, to_file)
     subprocess.run(cmd, shell=True)
