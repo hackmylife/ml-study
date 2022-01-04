@@ -1,6 +1,7 @@
 # coding:utf-8
 import numpy as np
 from dezero.core import Function, as_variable
+from dezero import utils
 
 
 # =============================================================================
@@ -92,3 +93,66 @@ class Tanh(Function):
 
 def tanh(x):
     return Tanh()(x)
+
+# =============================================================================
+# sum / sum_to / broadcast_to
+# =============================================================================
+class Sum(Function):
+    def __init__(self, axis, keepdism):
+        self.axis = axis
+        self.keepdims = keepdism
+
+    def forward(self, x):
+        self.x_shape = x.shape
+        y = x.sum(axis=self.axis, keepdims=self.keepdims)
+        return y
+
+    def backward(self, gy):
+        gy = utils.reshape_sum_backward(gy, self.x_shape, self.axis, self.keepdims)
+        gx = broadcast_to(gy, self.x_shape)
+        return gx
+
+
+def sum(x, axis=None, keepdims=False):
+    return Sum(axis, keepdims)(x)
+
+
+class SumTo(Function):
+    def __init__(self, shape):
+        self.shape = shape
+
+    def forward(self, x):
+        self.x_shape = x.shape
+        y = utils.sum_to(x, self.shape)
+        return y
+
+    def backward(self, gy):
+        gx = broadcast_to(gy, self.x_shape)
+        return gx
+
+
+def sum_to(x, shape):
+    if x.shape == shape:
+        return as_variable(x)
+    return SumTo(shape)(x)
+
+
+class BroadcastTo(Function):
+    def __init__(self, shape):
+        self.shape = shape
+
+    def forward(self, x):
+        self.x_shape = x.shape
+        y = np.broadcast_to(x, self.shape)
+        return y
+
+    def backward(self, gy):
+        gx = sum_to(gy, self.x_shape)
+        return gx
+
+
+def broadcast_to(x, shape):
+    if x.shape == shape:
+        return as_variable(x)
+    return BroadcastTo(shape)(x)
+
