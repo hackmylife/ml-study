@@ -43,7 +43,7 @@ class Transpose(Function):
         return transpose(gy, inv_axes)
 
 
-def transpose(x):
+def transpose(x, axes=None):
     return Transpose()(x)
 
 
