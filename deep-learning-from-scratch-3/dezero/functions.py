@@ -188,7 +188,7 @@ def matmul(x, W):
     return MatMul()(x, W)
 
 
-class Liner(Function):
+class Linear(Function):
     def forward(self, x, W, b):
         y = x.dot(W)
         if b is not None:
@@ -203,11 +203,11 @@ class Liner(Function):
         return gx, gW, gb
 
 
-def liner(x, W, b=None):
-    return Liner()(x, W, b)
+def linear(x, W, b=None):
+    return Linear()(x, W, b)
 
 
-def liner_simple(x, W, b=None):
+def linear_simple(x, W, b=None):
     x, W = as_variable(x), as_variable(W)
     t = matmul(x, W)
     if b is None:
