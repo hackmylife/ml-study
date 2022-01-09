@@ -18,7 +18,7 @@ else:
     from dezero.core import as_variable
     from dezero.core import setup_variable
     from dezero.layers import Layer
-    from dezero.moels import Model
+    from dezero.models import Model
 
     import dezero.functions
     import dezero.utils
