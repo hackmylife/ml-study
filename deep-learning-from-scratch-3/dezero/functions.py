@@ -5,7 +5,7 @@ from dezero import utils
 
 
 # =============================================================================
-# Tensor operations: reshape / transpose
+# Tensor operations: reshape / transpose / get_item
 # =============================================================================
 class Reshape(Function):
     def __init__(self, shape):
@@ -46,6 +46,40 @@ class Transpose(Function):
 
 def transpose(x, axes=None):
     return Transpose()(x)
+
+
+class GetItem(Function):
+    def __init__(self, slices):
+        self.slices = slices
+
+    def forward(self, x):
+        y = x[self.slices]
+        return y
+
+    def backward(self, gy):
+        x, = self.inputs
+        f = GetItemGrad(self.slices, x.shape)
+        return f(gy)
+
+
+class GetItemGrad(Function):
+    def __init__(self, slices, in_shape):
+        self.slices = slices
+        self.in_shape = in_shape
+
+    def forward(self, gy):
+        gx = np.zeros(self.in_shape, detype=gy.dtype)
+
+        np.add.at(gx, self.slices, gy)
+        return gx
+
+    def backward(self, ggx):
+        return get_item(ggx, self.slices)
+
+
+def get_item(x, slices):
+    f = GetItem(slices)
+    return f(x)
 
 
 class Sin(Function):
@@ -241,7 +275,7 @@ def mean_squared_error(x0, x1):
 
 
 # =============================================================================
-# activation function: sigmoid
+# activation function: sigmoid / softmax
 # =============================================================================
 def sigmoid_simple(x):
     x = as_variable(x)
@@ -262,3 +296,25 @@ class Sigmoid(Function):
 
 def sigmoid(x):
     return Sigmoid()(x)
+
+
+class Softmax(Function):
+    def __init__(self, axis=1):
+        self.axis = axis
+
+    def forward(self, x):
+        y = x - x.max(axis=self.axis, keepdims=True)
+        y = np.exp(y)
+        y /= y.sum(axis=self.axis, keepdims=True)
+        return y
+
+    def backward(self, gy):
+        y = self.outputs[0]()
+        gx = y * gy
+        sumdx = gx.sum(axis=self.axis, keepdims=True)
+        gx -= y * sumdx
+        return gx
+
+
+def softmax(x, axis=1):
+    return Softmax(axis)(x)
