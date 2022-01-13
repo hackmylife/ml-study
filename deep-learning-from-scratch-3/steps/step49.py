@@ -19,7 +19,7 @@ lr = 1.0
 # datasets class
 train_set = dezero.datasets.Spiral()
 
-# gemerate model / optimizer
+# generate model / optimizer
 model = MLP((hidden_size, 10))
 optimizer = optimizers.SGD(lr).setup(model)
 
@@ -46,6 +46,6 @@ for epoch in range(max_epoch):
         sum_loss += float(loss.data) * len(batch_t)
 
     avg_loss = sum_loss / data_size
-    print('ephock %d, loss %.2f' % (epoch + 1, avg_loss))
+    print('epoch %d, loss %.2f' % (epoch + 1, avg_loss))
 
 
