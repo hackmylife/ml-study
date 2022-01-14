@@ -24,5 +24,6 @@ else:
 
     import dezero.functions
     import dezero.utils
+    import dezero.transform
 
 setup_variable()
