@@ -12,6 +12,7 @@ import dezero
 
 class Config:
     enable_backprop = True
+    train = True
 
 
 class Variable:
@@ -253,6 +254,10 @@ def using_config(name, value):
         yield
     finally:
         setattr(Config, name, old_value)
+
+
+def test_mode():
+    return using_config('train', False)
 
 
 def no_grad():
