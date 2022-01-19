@@ -27,5 +27,10 @@ else:
     import dezero.functions
     import dezero.utils
     import dezero.transform
+    import dezero.dataloaders
+    import dezero.optimizers
+    import dezero.functions_conv
+    import dezero.layers
+    import dezero.cuda
 
 setup_variable()
