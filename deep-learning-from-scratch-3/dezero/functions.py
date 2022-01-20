@@ -48,7 +48,7 @@ class Transpose(Function):
 
 
 def transpose(x, axes=None):
-    return Transpose()(x)
+    return Transpose(axes)(x)
 
 
 class GetItem(Function):
