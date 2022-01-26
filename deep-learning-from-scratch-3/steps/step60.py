@@ -47,7 +47,7 @@ for epoch in range(max_epoch):
         count += 1
 
         if count % bptt_length == 0 or count == seqlen:
-            dezero.utils.plot_dot_graph(loss)
+            #dezero.utils.plot_dot_graph(loss)
 
             model.cleargrads()
             loss.backward()
