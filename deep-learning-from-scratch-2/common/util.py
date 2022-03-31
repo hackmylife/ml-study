@@ -14,3 +14,22 @@ def clip_grads(grads, max_norm):
         for grad in grads:
             grad *= rate
 
+
+def preprocess(text):
+    text = text.lower()
+    text = text.replace('.', ' .')
+    words = text.split(' ')
+
+    w2i = {}
+    i2w = {}
+
+    for word in words:
+        if word not in w2i:
+            id = len(w2i)
+            w2i[word] = id
+            i2w[id] = word
+
+    corpus = np.array([w2i[w] for w in words])
+
+    return corpus, w2i, i2w
+
