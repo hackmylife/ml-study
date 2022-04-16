@@ -72,7 +72,7 @@ class Renderer:
 
                 if policy is not None and state != self.wall_state:
                     actions = policy[state]
-                    max_actions = [kv[0] for kv in actions.item() if kv[1] == max(actions.values())]
+                    max_actions = [kv[0] for kv in actions.items() if kv[1] == max(actions.values())]
 
                     arrows = ["↑", "↓", "←", "→"]
                     offsets = [(0, 0.1), (0, -0.1), (-0.1, 0), (0.1, 0)]
