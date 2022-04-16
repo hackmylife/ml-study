@@ -1,4 +1,5 @@
 import numpy as np
+import common.gridworld_render as render_helper
 
 
 class GridWorld:
@@ -12,11 +13,11 @@ class GridWorld:
         }
 
         self.reward_map = np.array(
-            [[0, 0, 0, 1],
-             [0, None, 0, -1],
+            [[0, 0, 0, 1.0],
+             [0, None, 0, -1.0],
              [0, 0, 0, 0]]
         )
-        self.goal_start = (0, 3)
+        self.goal_state = (0, 3)
         self.wall_state = (1, 1)
         self.start_state = (2, 0)
         self.agent_start = self.start_state
@@ -56,3 +57,8 @@ class GridWorld:
 
     def reward(self, state, action, next_state):
         return self.reward_map[next_state]
+
+    def render_v(self, v=None, policy=None, print_value=True):
+        renderer = render_helper.Renderer(self.reward_map, self.goal_state, self.wall_state)
+        renderer.render_v(v, policy, print_value)
+
