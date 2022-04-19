@@ -8,10 +8,11 @@ def sample(dices=2):
     return x
 
 trial = 1000
+V, n = 0, 0
 
 samples = []
 for _ in range(trial):
     s = sample()
-    samples.append(s)
-    V = sum(samples) / len(samples)
+    n += 1
+    V += (s - V) / n
     print(V)
