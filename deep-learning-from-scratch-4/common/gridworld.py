@@ -20,7 +20,7 @@ class GridWorld:
         self.goal_state = (0, 3)
         self.wall_state = (1, 1)
         self.start_state = (2, 0)
-        self.agent_start = self.start_state
+        self.agent_state = self.start_state
 
     @property
     def height(self):
@@ -57,6 +57,19 @@ class GridWorld:
 
     def reward(self, state, action, next_state):
         return self.reward_map[next_state]
+
+    def reset(self):
+        self.agent_state = self.start_state
+        return self.agent_state
+
+    def step(self, action):
+        state = self.agent_state
+        next_state = self.next_state(state, action)
+        reward = self.reward(state, action, next_state)
+        done = (next_state == self.goal_state)
+
+        self.agent_state = next_state
+        return next_state, reward, done
 
     def render_v(self, v=None, policy=None, print_value=True):
         renderer = render_helper.Renderer(self.reward_map, self.goal_state, self.wall_state)
