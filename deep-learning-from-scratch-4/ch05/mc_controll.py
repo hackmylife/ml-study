@@ -17,7 +17,6 @@ class McAgent:
         random_actions = {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25}
         self.pi = defaultdict(lambda: random_actions)
         self.Q = defaultdict(lambda: 0)
-        self.cnts = defaultdict(lambda: 0)
         self.memory = []
 
     def get_action(self, state):
@@ -46,7 +45,7 @@ class McAgent:
 env = GridWorld()
 agent = McAgent()
 
-episodes = 1000
+episodes = 10000
 
 for episode in range(episodes):
     state = env.reset()
@@ -63,5 +62,5 @@ for episode in range(episodes):
 
         state = next_state
 
-#env.render_v(agent.Q)
-print(agent.Q)
+env.render_q(agent.Q)
+
