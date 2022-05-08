@@ -3,7 +3,7 @@ import sys, os
 sys.path.append(os.path.pardir)
 import pickle
 import numpy as np
-from common.layers import *
+from common.my_layers import *
 
 
 class DeepConvNet:
