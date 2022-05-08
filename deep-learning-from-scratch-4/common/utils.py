@@ -12,3 +12,12 @@ def greedy_probs(Q, state, epsilon=0, actions_size=4):
     action_probs = {action: base_prob for action in range(actions_size)}
     action_probs[max_action] += (1 - epsilon)
     return action_probs
+
+
+def one_hot(state):
+    HEIGHT, WIDTH = 3,4
+    vec = np.zeros(HEIGHT * WIDTH, dtype=np.float32)
+    y, x = state
+    idx = WIDTH * y + x
+    vec[idx] = 1.0
+    return vec[np.newaxis, :]
