@@ -11,5 +11,5 @@ while not done:
     action = np.random.choice([0, 1])
     next_state, reward, done, info = env.step(action)
     print('next_state: {}, reward: {}, done: {}, info: {}', next_state, reward, done, info)
-    time.sleep(1)
+    time.sleep(0.2)
 env.close()
