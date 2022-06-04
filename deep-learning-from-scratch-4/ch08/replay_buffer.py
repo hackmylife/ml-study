@@ -1,6 +1,7 @@
 from collections import deque
 import random
 import numpy as np
+import gym
 
 
 class ReplayBuffer:
@@ -24,3 +25,24 @@ class ReplayBuffer:
         next_state = np.stack([x[3] for x in data])
         done = np.array([x[4] for x in data]).astype(np.int32)
         return state, action, reward, next_state, done
+
+
+env = gym.make('CartPole-v1')
+replay_buffer = ReplayBuffer(buffer_size=10000, batch_size=32)
+
+for episode in range(10):
+    state = env.reset()
+    done = False
+
+    while not done:
+        action = 0
+        next_state, reward, done, info = env.step(action)
+        replay_buffer.add(state, action, reward, next_state, done)
+        state = next_state
+
+state, action, reward, next_state, done = replay_buffer.get_batch()
+print(state.shape)
+print(action.shape)
+print(reward.shape)
+print(next_state.shape)
+print(done.shape)
