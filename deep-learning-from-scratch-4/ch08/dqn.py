@@ -1,4 +1,6 @@
 import copy
+
+import matplotlib.pyplot as plt
 from dezero import Model
 from dezero import optimizers
 import dezero.functions as F
@@ -116,3 +118,25 @@ for episode in range(episodes):
         agent.sync_qnet()
 
     reward_history.append(total_reward)
+    if episode % 10 == 0:
+        print("episode :{}, total reward : {}".format(episode, total_reward))
+
+# plot
+plt.xlabel('Episode')
+plt.ylabel('Total Reward')
+plt.plot(range(len(reward_history)), reward_history)
+plt.show()
+
+# play
+agent.epsilon = 0
+state = env.reset()
+done = False
+total_reward = 0
+
+while not done:
+    action = agent.get_action(state)
+    next_state, reward, done, info = env.step(action)
+    state = next_state
+    total_reward += reward
+    env.render()
+print('Total Reward:', total_reward)
