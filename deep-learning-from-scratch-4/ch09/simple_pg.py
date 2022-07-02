@@ -1,3 +1,6 @@
+if '__file__' in globals():
+    import os, sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import numpy as np
 import gym
 from dezero import Model
@@ -36,17 +39,48 @@ class Agent:
         action = np.random.choice(len(probs), p=probs.data)
         return action, probs[action]
 
+    def add(self, reward, prob):
+        data = (reward, prob)
+        self.memory.append(data)
 
+    def update(self):
+        self.pi.cleargrads()
+
+        G, loss = 0, 0
+        for reward, prob in reversed(self.memory):
+            G = reward + self.gamma * G
+
+        for reward, prob in self.memory:
+            loss += -F.log(prob) * G
+
+        loss.backward()
+        self.optimizer.update()
+        self.memory = []
+
+episodes = 3000
 env = gym.make('CartPole-v1')
-state = env.reset()
 agent = Agent()
+reward_hisotry = []
 
-action, prob = agent.get_action(state)
-print('action:', action)
-print('prob:', prob)
+for episode in range(episodes):
+    state = env.reset()
+    done = False
+    total_reward = 0
 
-G = 100.0
-J = G * F.log(prob)
-print('J:', J)
+    while not done:
+        action, prob = agent.get_action(state)
+        next_state, reward, done, info = env.step(action)
 
-J.backward()
+        agent.add(reward, prob)
+        state = next_state
+        total_reward += reward
+
+    agent.update()
+    reward_hisotry.append(total_reward)
+    if episode % 100 == 0:
+        print("episode: {} end. total_reward: {:.1f}".format(episode, total_reward))
+
+# plot
+from common.utils import plot_total_reward
+plot_total_reward(reward_hisotry)
+

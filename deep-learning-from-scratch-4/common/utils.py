@@ -2,6 +2,7 @@ if '__file__' in globals():
     import os, sys
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def greedy_probs(Q, state, epsilon=0, actions_size=4):
@@ -21,3 +22,10 @@ def one_hot(state):
     idx = WIDTH * y + x
     vec[idx] = 1.0
     return vec[np.newaxis, :]
+
+
+def plot_total_reward(reward_history):
+    plt.xlabel('Episode')
+    plt.ylabel('Total Reward')
+    plt.plot(range(len(reward_history)), reward_history)
+    plt.show()
