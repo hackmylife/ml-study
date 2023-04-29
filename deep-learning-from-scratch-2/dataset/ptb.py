@@ -45,7 +45,7 @@ def load_vocab():
     vocab_path = dataset_dir + '/' + vocab_file
 
     if os.path.exists(vocab_path):
-        with open(vocab_file, 'rb') as f:
+        with open(vocab_path, 'rb') as f:
             word_to_id, id_to_word = pickle.load(f)
         return word_to_id, id_to_word
 
