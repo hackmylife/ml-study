@@ -20,7 +20,7 @@ class SimpleCBOW:
         self.out_layer = MatMul(W_out)
         self.loss_layer = SoftmaxWithLoss()
 
-        layers = [self.in_layer0, self.in_layer1, self.out_layer, self.loss_layer]
+        layers = [self.in_layer0, self.in_layer1, self.out_layer]
         self.params, self.grads = [], []
         for layer in layers:
             self.params += layer.params
@@ -29,7 +29,7 @@ class SimpleCBOW:
         self.word_vecs = W_in
 
 
-    def forword(self, contexts, target):
+    def forward(self, contexts, target):
         h0 = self.in_layer0.forward(contexts[:, 0])
         h1 = self.in_layer1.forward(contexts[:, 1])
         h = (h0 + h1) * 0.5
@@ -38,9 +38,9 @@ class SimpleCBOW:
         return loss
 
 
-    def backword(self, dout=1):
+    def backward(self, dout=1):
         ds = self.loss_layer.backward(dout)
-        da = self.out_layer.backward(dout)
+        da = self.out_layer.backward(ds)
         da *= 0.5
         self.in_layer1.backward(da)
         self.in_layer0.backward(da)
