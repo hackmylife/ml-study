@@ -1,4 +1,4 @@
-import np
+from common.np import *
 from common.functions import softmax, cross_entropy_error
 
 
